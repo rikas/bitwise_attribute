@@ -1,3 +1,6 @@
+[![Dependency Status](https://gemnasium.com/rikas/bitwise_attribute.svg)](https://gemnasium.com/rikas/bitwise_attribute)
+[![Build Status](https://travis-ci.org/rikas/bitwise_attribute.svg?branch=master)](https://travis-ci.org/rikas/bitwise_attribute)
+
 # BitwiseAttribute
 
 ## Installation

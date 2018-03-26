@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BitwiseAttribute
   class ValuesList < Array
     def initialize(field, record, values)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe BitwiseAttribute do
   describe '.build_mapping' do
     class TestModel
@@ -7,13 +9,13 @@ RSpec.describe BitwiseAttribute do
     it 'builds the mapping correctly if no values are given' do
       mapping = %i[pt fr en]
 
-      expect(TestModel.build_mapping('countries', mapping)).to eq(pt: 1, fr: 2, en: 4, empty: 0)
+      expect(TestModel.build_mapping(mapping)).to eq(pt: 1, fr: 2, en: 4, empty: 0)
     end
 
     it 'builds the mapping correctly if values are given' do
       mapping = { user: 1, manager: 2, admin: 4 }
 
-      expect(TestModel.build_mapping('roles', mapping)).to eq(mapping.merge(empty: 0))
+      expect(TestModel.build_mapping(mapping)).to eq(mapping.merge(empty: 0))
     end
   end
 

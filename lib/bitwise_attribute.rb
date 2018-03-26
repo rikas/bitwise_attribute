@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support'
 require 'active_support/concern'
 require 'active_support/core_ext'
@@ -14,14 +16,22 @@ module BitwiseAttribute
       # Check if the values is an array or hash with valid values. Raise ArgumentError otherwise.
       validate_values!(values)
 
-      # Sets the constant <name.upcase>_MAPPING
-      mapping = build_mapping(name, values)
+      mapping = build_mapping(values)
 
       @mapping ||= {}
       @mapping[name] = mapping
 
+      # Class methods
       define_singleton_method(name) do
-        @mapping[name]
+        mapping
+      end
+
+      define_singleton_method("with_#{name}") do |*vals|
+        where(column_name => bitwise_union(vals, name))
+      end
+
+      define_singleton_method("with_all_#{name}") do |*vals|
+        where(column_name => bitwise_intersection(vals, name))
       end
 
       define_method(name) do
@@ -45,7 +55,7 @@ module BitwiseAttribute
 
     # Builds internal bitwise key-value mapping it add a zero value, needed for bits operations.
     # Each sym get a power of 2 value
-    def build_mapping(name, values)
+    def build_mapping(values)
       {}.tap do |hash|
         if values.is_a?(Hash)
           hash.merge!(values.sort_by { |_, value| value }.to_h)
@@ -66,6 +76,47 @@ module BitwiseAttribute
           raise(ArgumentError, "Values should be a power of 2 (#{invalid_options})")
         end
       end
+    end
+
+    def mapping_for_name(name)
+      @mapping[name.to_sym]
+    end
+
+    def values_for_column(name)
+      mapping_for_name(name).values
+    end
+
+    def map_to_values(name, keys)
+      mapping = mapping_for_name(name)
+
+      keys.map { |key| mapping[key.to_sym] }.compact
+    end
+
+    def bitwise_union(keys, name)
+      mask = []
+
+      mapped = map_to_values(name, keys)
+
+      mapped.each do |mv|
+        values_for_column(name).each do |value|
+          mask << (mv | value)
+        end
+      end
+
+      mask.uniq
+    end
+
+    def bitwise_intersection(keys, name)
+      mask = []
+
+      mapped = map_to_values(name, keys)
+      mapped = mapped.reduce(&:|)
+
+      values_for_column(name).each do |value|
+        mask << (value | mapped)
+      end
+
+      mask.uniq
     end
   end
 

@@ -9,13 +9,13 @@ RSpec.describe BitwiseAttribute do
     it 'builds the mapping correctly if no values are given' do
       mapping = %i[pt fr en]
 
-      expect(TestModel.build_mapping(mapping)).to eq(pt: 1, fr: 2, en: 4, empty: 0)
+      expect(TestModel.build_mapping(mapping)).to eq(pt: 1, fr: 2, en: 4)
     end
 
     it 'builds the mapping correctly if values are given' do
       mapping = { user: 1, manager: 2, admin: 4 }
 
-      expect(TestModel.build_mapping(mapping)).to eq(mapping.merge(empty: 0))
+      expect(TestModel.build_mapping(mapping)).to eq(mapping)
     end
   end
 
@@ -68,8 +68,8 @@ RSpec.describe BitwiseAttribute do
 
     describe '.<name>' do
       it 'returns the defined mappings' do
-        expect(model.countries).to eq(pt: 1, fr: 2, en: 4, gb: 8, kr: 16, cn: 32, empty: 0)
-        expect(model.roles).to eq(user: 1, moderator: 2, admin: 4, empty: 0)
+        expect(model.countries).to eq(pt: 1, fr: 2, en: 4, gb: 8, kr: 16, cn: 32)
+        expect(model.roles).to eq(user: 1, moderator: 2, admin: 4)
       end
     end
 

@@ -62,8 +62,6 @@ module BitwiseAttribute
         else
           values.each_with_index { |key, index| hash[key] = 2**index }
         end
-
-        hash[:empty] = 0 # the default one
       end
     end
 

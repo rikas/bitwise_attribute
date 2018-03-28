@@ -21,19 +21,34 @@ module BitwiseAttribute
       @mapping ||= {}
       @mapping[name] = mapping
 
+      define_class_methods(name, column_name, mapping)
+      define_instante_methods(name, column_name, mapping)
+    end
+
+    def define_class_methods(name, column_name, mapping)
       # Class methods
       define_singleton_method(name) do
         mapping
       end
 
-      define_singleton_method("with_#{name}") do |*vals|
-        where(column_name => bitwise_union(vals, name))
+      define_singleton_method("with_#{name}") do |*keys|
+        where(column_name => bitwise_union(keys, name))
       end
 
-      define_singleton_method("with_all_#{name}") do |*vals|
-        where(column_name => bitwise_intersection(vals, name))
+      define_singleton_method("with_all_#{name}") do |*keys|
+        where(column_name => bitwise_intersection(keys, name))
       end
 
+      # Defines a class method for each key of the mapping, returning records that have *at least*
+      # the corresponding value.
+      mapping.keys.each do |key|
+        define_singleton_method(key) do
+          send("with_#{key}")
+        end
+      end
+    end
+
+    def define_instante_methods(name, column_name, mapping)
       define_method(name) do
         roles = value_getter(column_name, mapping)
 

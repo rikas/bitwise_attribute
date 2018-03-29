@@ -147,7 +147,7 @@ module BitwiseAttribute
     end
   end
 
-  private
+  private # rubocop:disable Lint/UselessAccessModifier
 
   # Return current value to symbols array
   #   Ex: 16 => [:slots, :credits]

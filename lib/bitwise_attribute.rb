@@ -25,6 +25,8 @@ module BitwiseAttribute
       define_instante_methods(name, column_name, mapping)
     end
 
+    private
+
     def define_class_methods(name, column_name, mapping)
       # Class methods
       define_singleton_method(name) do
@@ -35,6 +37,18 @@ module BitwiseAttribute
         where(column_name => bitwise_union(keys, name))
       end
 
+      define_singleton_method("with_#{name}_up_to") do |key|
+        all_keys = mapping.keys
+
+        index = all_keys.index(key)
+
+        smaller = all_keys.slice!(0..index)
+        larger = all_keys # the rest of the keys
+
+        where(column_name => bitwise_union(smaller, name))
+          .where.not(column_name => bitwise_union(larger, name))
+      end
+
       define_singleton_method("with_all_#{name}") do |*keys|
         where(column_name => bitwise_intersection(keys, name))
       end
@@ -43,7 +57,7 @@ module BitwiseAttribute
       # the corresponding value.
       mapping.keys.each do |key|
         define_singleton_method(key) do
-          send("with_#{key}")
+          send("with_#{name}", key)
         end
       end
     end

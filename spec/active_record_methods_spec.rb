@@ -43,6 +43,9 @@ RSpec.describe BitwiseAttribute::ActiveRecordMethods do
 
       # It also accepts an array as the argument
       expect(User.with_roles(%i[std a1])).to contain_exactly(u4, u5, u6, u7)
+
+      # It also accepts strings
+      expect(User.with_roles(%w[std a1])).to contain_exactly(u4, u5, u6, u7)
     end
   end
 
@@ -58,6 +61,9 @@ RSpec.describe BitwiseAttribute::ActiveRecordMethods do
 
       # It also accepts an array as the argument
       expect(User.with_any_roles(%i[std a1])).to contain_exactly(u1, u3, u4, u5, u6, u7)
+
+      # It also accepts strings
+      expect(User.with_any_roles(%i[std a1])).to contain_exactly(u1, u3, u4, u5, u6, u7)
     end
   end
 
@@ -72,6 +78,9 @@ RSpec.describe BitwiseAttribute::ActiveRecordMethods do
       expect(User.with_exact_roles(:std, :a1)).to contain_exactly(u4)
 
       # It also accepts an array as the argument
+      expect(User.with_exact_roles(%i[std a1])).to contain_exactly(u4)
+
+      # It also accepts strings
       expect(User.with_exact_roles(%i[std a1])).to contain_exactly(u4)
     end
   end
@@ -89,6 +98,9 @@ RSpec.describe BitwiseAttribute::ActiveRecordMethods do
       expect(User.without_roles(:std, :a1)).to contain_exactly(u2)
 
       # It also accepts an array as the argument
+      expect(User.without_roles(%i[std a1])).to contain_exactly(u2)
+
+      # It also accepts strings
       expect(User.without_roles(%i[std a1])).to contain_exactly(u2)
     end
   end

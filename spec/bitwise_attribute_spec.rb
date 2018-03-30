@@ -2,23 +2,17 @@
 
 RSpec.describe BitwiseAttribute do
   describe '.attr_bitwise' do
-    class TestModel2
+    class TestClass
       include BitwiseAttribute
       attr_accessor :country_mask
-    end
-
-    it 'raises ArgumentError if the mapping is incorrect' do
-      expect do
-        TestModel2.attr_bitwise :countries, values: { pt: 1, fr: 13, en: 77 }
-      end.to raise_error(ArgumentError)
     end
 
     it 'creates a boolean helper method for each key' do
       keys = %i[pt fr br es]
 
-      TestModel2.attr_bitwise :countries, values: keys
+      TestClass.attr_bitwise :countries, values: keys
 
-      instance = TestModel2.new
+      instance = TestClass.new
 
       keys.each do |key|
         expect(instance).to respond_to("#{key}?")

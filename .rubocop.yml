@@ -2,20 +2,19 @@ Metrics/AbcSize:
   Max: 30
 
 Style/Documentation:
-  Exclude:
-    - 'spec/**/*'
-    - 'test/**/*'
-    - 'lib/bitwise_attribute.rb'
-    - 'lib/bitwise_attribute/values_list.rb'
+  Enabled: false
 
 Metrics/LineLength:
   Max: 100
 
 Metrics/MethodLength:
-  Max: 30
+  Max: 50
 
 Metrics/BlockLength:
   Max: 150
 
 Metrics/ModuleLength:
   Max: 200
+
+Metrics/AbcSize:
+  Max: 70

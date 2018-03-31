@@ -78,11 +78,11 @@ module BitwiseAttribute
   def value_setter(mask_column, values, mapping)
     send("#{mask_column}=", 0)
 
-    values.each do |value|
-      raise(ArgumentError, "Unknown value #{value}!") unless mapping[value]
+    values = values.map(&:to_sym).compact.uniq
 
-      send("#{mask_column}=", send(mask_column) | mapping[value])
-    end
+    values &= mapping.keys
+
+    values.each { |value| send("#{mask_column}=", send(mask_column) | mapping[value]) }
   end
 
   # Return if value is present in mask (raw value)

@@ -77,6 +77,12 @@ RSpec.describe BitwiseAttribute do
 
         expect(record.roles_number).to eq(5)
       end
+
+      it 'removes invalid keys' do
+        record.countries = ['', 'cn', 'ilegal']
+
+        expect(record.country_mask).to eq(32)
+      end
     end
 
     describe 'values operations' do

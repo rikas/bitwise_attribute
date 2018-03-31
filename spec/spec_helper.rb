@@ -2,6 +2,7 @@
 
 require 'bundler/setup'
 require 'simplecov'
+require 'pry-byebug'
 
 SimpleCov.start do
   add_filter '/spec/'

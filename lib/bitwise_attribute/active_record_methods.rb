@@ -4,7 +4,7 @@ module BitwiseAttribute
   module ActiveRecordMethods
     def define_named_scopes(name, column_name, mapping)
       define_singleton_method("with_#{name}") do |*keys|
-        keys = cleanup_keys(keys)
+        keys = cleanup_keys(keys, mapping)
 
         return [] unless keys&.any?
 
@@ -18,7 +18,7 @@ module BitwiseAttribute
       end
 
       define_singleton_method("with_any_#{name}") do |*keys|
-        keys = cleanup_keys(keys)
+        keys = cleanup_keys(keys, mapping)
 
         return where.not(column_name => nil) unless keys&.any?
 
@@ -32,7 +32,7 @@ module BitwiseAttribute
       end
 
       define_singleton_method("with_exact_#{name}") do |*keys|
-        keys = cleanup_keys(keys)
+        keys = cleanup_keys(keys, mapping)
 
         return [] unless keys&.any?
 
@@ -46,7 +46,7 @@ module BitwiseAttribute
       end
 
       define_singleton_method("without_#{name}") do |*keys|
-        keys = cleanup_keys(keys)
+        keys = cleanup_keys(keys, mapping)
 
         return where(column_name => nil).or(where(column_name => 0)) unless keys&.any?
 
@@ -68,10 +68,12 @@ module BitwiseAttribute
       end
     end
 
-    def cleanup_keys(keys)
+    def cleanup_keys(keys, mapping)
       return [] unless keys
 
-      keys.flatten.map(&:to_sym).uniq
+      clean = keys.flatten.map(&:to_sym).compact.uniq
+
+      clean & mapping.keys # only roles that we know about
     end
   end
 end

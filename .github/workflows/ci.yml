@@ -28,8 +28,6 @@ jobs:
         ruby: ["2.5", "2.6", "2.7", "3.0"]
         experimental: [false]
         include:
-        - ruby: "jruby"
-          experimental: true
         - ruby: "truffleruby"
           experimental: true
     steps:

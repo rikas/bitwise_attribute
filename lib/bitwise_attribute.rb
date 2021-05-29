@@ -16,7 +16,7 @@ module BitwiseAttribute
   module ClassMethods
     include BitwiseAttribute::ActiveRecordMethods
 
-    def attr_bitwise(name, column_name: nil, values:)
+    def attr_bitwise(name, values:, column_name: nil)
       column_name ||= "#{name.to_s.singularize}_mask"
 
       mapping = build_mapping(values)
@@ -48,7 +48,7 @@ module BitwiseAttribute
       end
 
       # Adds a boolean method for each key (ex: admin?)
-      mapping.keys.each do |key|
+      mapping.each_key do |key|
         define_method("#{key}?") do
           value?(column_name, mapping[key])
         end

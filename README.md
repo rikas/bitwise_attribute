@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/rikas/bitwise_attribute.svg?branch=master)](https://travis-ci.org/rikas/bitwise_attribute)
-
 # BitwiseAttribute
 Manipulation of bitmask attributes in your classes (typically ActiveRecord models). You can have multiple values mapped to the same column — for example when you need a User with multiple roles.
 
@@ -43,7 +41,7 @@ end
 ```ruby
 class User < ActiveRecord::Base
   include BitwiseAttribute
-  
+
   # This line will do all the magic!
   #
   # By default we assume that your column will be called `role_mask`.

@@ -3,10 +3,10 @@
 module BitwiseAttribute
   class ValuesList < Array
     def initialize(field, record, values)
+      super(concat(values))
+
       @field = field
       @record = record
-
-      concat(values)
     end
 
     def <<(value)

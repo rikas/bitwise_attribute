@@ -61,7 +61,7 @@ module BitwiseAttribute
 
       # Defines a class method for each key of the mapping, returning records that have *at least*
       # the corresponding value.
-      mapping.keys.each do |key|
+      mapping.each_key do |key|
         define_singleton_method(key) do
           send("with_#{name}", key)
         end

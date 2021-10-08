@@ -6,12 +6,12 @@ module BitwiseAttribute
       define_singleton_method("with_#{name}") do |*keys|
         keys = cleanup_keys(keys, mapping)
 
-        return [] unless keys&.any?
+        return none unless keys&.any?
 
-        records = where("#{column_name} & #{mapping[keys.first]} = #{mapping[keys.first]}")
+        records = where((arel_table[column_name] & mapping[keys.first]).eq(mapping[keys.first]))
 
         keys[1..-1].each do |key|
-          records = records.where("#{column_name} & #{mapping[key]} = #{mapping[key]}")
+          records = where((arel_table[column_name] & mapping[key]).eq(mapping[key]))
         end
 
         records
@@ -22,10 +22,10 @@ module BitwiseAttribute
 
         return where.not(column_name => nil) unless keys&.any?
 
-        records = where("#{column_name} & #{mapping[keys.first]} = #{mapping[keys.first]}")
+        records = where((arel_table[column_name] & mapping[keys.first]).eq(mapping[keys.first]))
 
         keys[1..-1].each do |key|
-          records = records.or(where("#{column_name} & #{mapping[key]} = #{mapping[key]}"))
+          records = records.or(where((arel_table[column_name] & mapping[key]).eq(mapping[key])))
         end
 
         records
@@ -34,12 +34,12 @@ module BitwiseAttribute
       define_singleton_method("with_exact_#{name}") do |*keys|
         keys = cleanup_keys(keys, mapping)
 
-        return [] unless keys&.any?
+        return none unless keys&.any?
 
         records = send("with_#{name}", keys)
 
         (mapping.keys - keys).each do |key|
-          records = records.where("#{column_name} & #{mapping[key]} != #{mapping[key]}")
+          records = where((arel_table[column_name] & mapping[key]).not_eq(mapping[key]))
         end
 
         records
@@ -50,10 +50,10 @@ module BitwiseAttribute
 
         return where(column_name => nil).or(where(column_name => 0)) unless keys&.any?
 
-        records = where("#{column_name} & #{mapping[keys.first]} != #{mapping[keys.first]}")
+        records = where((arel_table[column_name] & mapping[keys.first]).not_eq(mapping[keys.first]))
 
         keys[1..-1].each do |key|
-          records = records.where("#{column_name} & #{mapping[key]} != #{mapping[key]}")
+          records = where((arel_table[column_name] & mapping[key]).not_eq(mapping[key]))
         end
 
         records

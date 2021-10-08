@@ -21,14 +21,14 @@ class User < ActiveRecord::Base
 end
 
 RSpec.describe BitwiseAttribute::ActiveRecordMethods do
-  let(:u1) { User.create!(roles: [:std]) }
-  let(:u2) { User.create!(roles: [:mod]) }
-  let(:u3) { User.create!(roles: [:a1]) }
+  let!(:u1) { User.create!(roles: [:std]) }
+  let!(:u2) { User.create!(roles: [:mod]) }
+  let!(:u3) { User.create!(roles: [:a1]) }
 
-  let(:u4) { User.create!(roles: %i[std a1]) }
-  let(:u5) { User.create!(roles: %i[a1 mod std]) }
-  let(:u6) { User.create!(roles: %i[a1 a2 std]) }
-  let(:u7) { User.create!(roles: %i[std mod a1 a2]) }
+  let!(:u4) { User.create!(roles: %i[std a1]) }
+  let!(:u5) { User.create!(roles: %i[a1 mod std]) }
+  let!(:u6) { User.create!(roles: %i[a1 a2 std]) }
+  let!(:u7) { User.create!(roles: %i[std mod a1 a2]) }
 
   after { User.destroy_all }
 

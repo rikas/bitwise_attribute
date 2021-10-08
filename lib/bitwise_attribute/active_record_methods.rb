@@ -8,10 +8,10 @@ module BitwiseAttribute
 
         return none unless keys&.any?
 
-        records = where((arel_table[column_name] & mapping[keys.first]).eq(mapping[keys.first]))
+        records = all
 
-        keys[1..-1].each do |key|
-          records = where((arel_table[column_name] & mapping[key]).eq(mapping[key]))
+        keys.each do |key|
+          records = records.where((arel_table[column_name] & mapping[key]).eq(mapping[key]))
         end
 
         records
@@ -22,9 +22,9 @@ module BitwiseAttribute
 
         return where.not(column_name => nil) unless keys&.any?
 
-        records = where((arel_table[column_name] & mapping[keys.first]).eq(mapping[keys.first]))
+        records = where('1=0')
 
-        keys[1..-1].each do |key|
+        keys.each do |key|
           records = records.or(where((arel_table[column_name] & mapping[key]).eq(mapping[key])))
         end
 
@@ -39,7 +39,7 @@ module BitwiseAttribute
         records = send("with_#{name}", keys)
 
         (mapping.keys - keys).each do |key|
-          records = where((arel_table[column_name] & mapping[key]).not_eq(mapping[key]))
+          records = records.where((arel_table[column_name] & mapping[key]).not_eq(mapping[key]))
         end
 
         records
@@ -50,10 +50,10 @@ module BitwiseAttribute
 
         return where(column_name => nil).or(where(column_name => 0)) unless keys&.any?
 
-        records = where((arel_table[column_name] & mapping[keys.first]).not_eq(mapping[keys.first]))
+        records = all
 
-        keys[1..-1].each do |key|
-          records = where((arel_table[column_name] & mapping[key]).not_eq(mapping[key]))
+        keys.each do |key|
+          records = records.where((arel_table[column_name] & mapping[key]).not_eq(mapping[key]))
         end
 
         records
